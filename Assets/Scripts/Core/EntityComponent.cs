@@ -1,7 +1,9 @@
-﻿namespace Core
+﻿using UnityEngine;
+
+namespace Core
 {
-    public class EntityComponent
+    public class EntityComponent : ScriptableObject
     {
-        
+        [HideInInspector] public int componentID;
     }
 }

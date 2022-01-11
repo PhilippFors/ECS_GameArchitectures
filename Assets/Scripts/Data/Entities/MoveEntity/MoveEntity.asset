@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d056ea838c55401e88be98b731663bc1, type: 3}
+  m_Name: MoveEntity
+  m_EditorClassIdentifier: 
+  entityType: MoveEntity
+  components:
+  - {fileID: 11400000, guid: 7f11f9731d054a64e81415ad597dcfdc, type: 2}
+  - {fileID: 11400000, guid: b51ac8f6a058d054297e1afe60b26d3f, type: 2}

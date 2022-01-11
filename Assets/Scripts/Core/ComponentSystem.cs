@@ -4,8 +4,7 @@ namespace Core
 {
     public class ComponentSystem
     {
-        public virtual void Start(){}
+        public List<Entity> entities;
         public virtual void Update(){}
-        public virtual void OnDisable(){}
     }
 }

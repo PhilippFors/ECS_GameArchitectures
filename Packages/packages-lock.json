@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.philfors.usefulcode": {
+      "version": "https://github.com/PhilippFors/useful-code.git?path=Assets/UsefulCode#5efa15eeee756cfe7ba36f4c4e2b0555abe81405",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.inputsystem": "1.0.2"
+      },
+      "hash": "5efa15eeee756cfe7ba36f4c4e2b0555abe81405"
+    },
     "com.unity.collab-proxy": {
       "version": "1.11.2",
       "depth": 0,
@@ -35,6 +44,13 @@
     "com.unity.ide.vscode": {
       "version": "1.2.4",
       "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.inputsystem": {
+      "version": "1.0.2",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

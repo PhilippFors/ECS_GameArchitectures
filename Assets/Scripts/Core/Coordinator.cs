@@ -1,16 +1,26 @@
-﻿using UnityEngine;
+﻿using Core.Systems;
+using UnityEngine;
 
 namespace Core
 {
+    [DefaultExecutionOrder(-1)]
     public class Coordinator : MonoBehaviour
     {
-        private EntityManager entityManager;
+        [SerializeField] private EntityManager entityManager; // serialized by Unity, no instantiation needed
         private SystemManager systemManager;
 
         private void Awake()
         {
-            entityManager = new EntityManager();
             systemManager = new SystemManager();
+            entityManager.Init();
+            
+            RegisterSystem<MoveSystem>();
+            RegisterSystem<HelloWorldSystem>();
+
+            var moveSystemMask = ComponentMask.MoveComponent;
+            SetComponentMask<MoveSystem>(moveSystemMask);
+            var helloWorldSystemMask = ComponentMask.HelloWorldComponent;
+            SetComponentMask<HelloWorldSystem>(helloWorldSystemMask);
         }
 
         private void Update()
@@ -18,16 +28,47 @@ namespace Core
             systemManager.Update();
         }
 
-        public Entity CreateEntity() => entityManager.CreateEntity();
-
-        public void AddComponent<T>(Entity entity) where T : EntityComponent, new()
+        public void RegisterSystem<T>() where T : ComponentSystem, new()
         {
-            entity.AddComponent<T>();
+            systemManager.RegisterSystem<T>();
+        }
+
+        public void RemoveSystem<T>() where T : ComponentSystem
+        {
+            systemManager.RemoveSystem<T>();
+        }
+
+        public void SetComponentMask<T>(ComponentMask mask) where T : ComponentSystem
+        {
+            systemManager.SetComponentMask<T>(mask);
+        }
+        
+        public Entity CreateEntity(string type)
+        {
+            var entity = entityManager.CreateEntity(type);
+            systemManager.UpdateEntity(entity, entityManager.GetComponentMask(entity));
+            return entity;
+        }
+
+        public void DestoryEntity(Entity entity)
+        {
+            entityManager.DestroyEntity(entity);
+            systemManager.DestroyEntity(entity);
+        }
+        
+        public void CreateConfig(Entity entity, string configName) => entityManager.CreateConfig(entity, configName);
+        
+        public T AddComponent<T>(Entity entity) where T : EntityComponent
+        {
+            var c = entityManager.AddComponent<T>(entity);
+            systemManager.UpdateEntity(entity, entityManager.GetComponentMask(entity));
+            return c;
         }
 
         public void RemoveComponent<T>(Entity entity) where T : EntityComponent
         {
-            entity.RemoveComponent<T>();
+            entityManager.RemoveComponent<T>(entity);
+            systemManager.UpdateEntity(entity, entityManager.GetComponentMask(entity));
         }
     }
 }

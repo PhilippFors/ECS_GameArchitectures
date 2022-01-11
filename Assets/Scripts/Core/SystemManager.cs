@@ -6,11 +6,12 @@ namespace Core
     public class SystemManager
     {
         private Dictionary<string, ComponentSystem> systems;
-        private Dictionary<string, EntityView> entityViews;
+        private Dictionary<string, ComponentMask> masks;
+
         public SystemManager()
         {
+            masks = new Dictionary<string, ComponentMask>();
             systems = new Dictionary<string, ComponentSystem>();
-            entityViews = new Dictionary<string, EntityView>();
         }
 
         public T RegisterSystem<T>() where T : ComponentSystem, new()
@@ -22,8 +23,8 @@ namespace Core
             }
 
             var sys = new T();
+            sys.entities = new List<Entity>();
             systems.Add(typeof(T).Name, sys);
-            sys.Start();
             return sys;
         }
 
@@ -36,23 +37,48 @@ namespace Core
             }
 
             systems.TryGetValue(hash, out var val);
-            val.OnDisable();
             systems.Remove(hash);
         }
 
-        public EntityView GetEntityView<T>() where T : EntityComponent
+        public void UpdateEntity(Entity entity, ComponentMask entityMask)
+        {
+            foreach (var pair in systems) {
+                var type = pair.Key;
+                var system = pair.Value;
+                masks.TryGetValue(type, out var systemMask);
+
+                if ((entityMask & systemMask) == systemMask) {
+                    if (!system.entities.Contains(entity)) {
+                        system.entities.Add(entity);
+                    }
+                }
+                else {
+                    system.entities.Remove(entity);
+                }
+            }
+        }
+
+        public void DestroyEntity(Entity entity)
+        {
+            foreach (var pair in systems) {
+                var sys = pair.Value;
+                if (sys.entities.Contains(entity)) {
+                    sys.entities.Remove(entity);
+                }
+            }
+        }
+        
+        public void SetComponentMask<T>(ComponentMask mask) where T : ComponentSystem
         {
             var hash = typeof(T).Name;
-            if (!entityViews.ContainsKey(hash)) {
-                entityViews.Add(hash, new EntityView());
-            }
-
-            entityViews.TryGetValue(hash, out var val);
-            return val;
+            masks.Add(hash, mask);
         }
 
         public void Update()
         {
+            if (systems.Count == 0) {
+                return;
+            }
             foreach (var pair in systems) {
                 var sys = pair.Value;
                 sys.Update();
