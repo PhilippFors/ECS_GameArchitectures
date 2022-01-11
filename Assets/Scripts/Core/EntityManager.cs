@@ -36,7 +36,7 @@ namespace Core
         public T AddComponent<T>(Entity entity) where T : EntityComponent
         {
             var inst = ScriptableObject.CreateInstance(typeof(T));
-            var component = (EntityComponent) UnityHelper.Instance.InstantiateObject(inst);
+            var component = (EntityComponent) ScriptableObject.Instantiate(inst);
             return (T) AddComponent(entity, component);
         }
 
@@ -78,7 +78,8 @@ namespace Core
             if (type != "") {
                 var config = configs.Find(x => x.entityType == type);
                 foreach (var component in config.components) {
-                    AddComponent(newEntity, component);
+                    var c = ScriptableObject.Instantiate(component);
+                    AddComponent(newEntity, c);
                 }
             }
 

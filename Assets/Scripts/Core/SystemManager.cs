@@ -25,6 +25,7 @@ namespace Core
             var sys = new T();
             sys.entities = new List<Entity>();
             systems.Add(typeof(T).Name, sys);
+            sys.Initialize();
             return sys;
         }
 
@@ -50,6 +51,7 @@ namespace Core
                 if ((entityMask & systemMask) == systemMask) {
                     if (!system.entities.Contains(entity)) {
                         system.entities.Add(entity);
+                        system.Start(entity);
                     }
                 }
                 else {
