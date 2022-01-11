@@ -8,7 +8,9 @@ namespace Util
     public class InitializeEntity : MonoBehaviour
     {
         public int entityCount;
+        
         private Coordinator coordinator;
+
         private void Awake()
         {
             coordinator = GetComponent<Coordinator>();
@@ -16,16 +18,19 @@ namespace Util
 
         private void Start()
         {
-            // Creating entities is still possible in code, no editor needed technically
-            // var newEntity = coordinator.CreateEntity("MoveEntity");
-            // var component = coordinator.AddComponent<MoveComponent>(newEntity);
-            // component.moveSpeed = 20;
-            // coordinator.CreateConfig(newEntity, "MoveEntity_3");
+            // Creating entities and entity configs is still possible in code, no editor needed technically
+            var newEntity = coordinator.CreateEntity("");
+            coordinator.AddComponent<MoveComponent>(newEntity);
+            var transformComponent = coordinator.AddComponent<TransformComponent>(newEntity);
+            transformComponent.scale = Vector3.one;
+            var rendercomponent = coordinator.AddComponent<RenderComponent>(newEntity);
+            rendercomponent.mesh = Resources.Load<Mesh>("testMesh");
+            rendercomponent.material = Resources.Load("testMaterial") as Material;
+            coordinator.CreateConfig(newEntity, "MoveEntity_3");
 
             for (int i = 0; i < entityCount; i++) {
                 coordinator.CreateEntity("MoveEntity");
-                // coordinator.CreateEntity("MoveEntity_2");
-                // coordinator.CreateEntity("MoveEntity_3");
+                coordinator.CreateEntity("MoveEntity_3");
             }
         }
 

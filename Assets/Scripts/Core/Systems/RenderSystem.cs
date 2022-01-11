@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Core.Components;
+﻿using Core.Components;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Core.Systems
 {
@@ -15,6 +13,7 @@ namespace Core.Systems
                 transform.rotation = Quaternion.identity;
                 Matrix4x4 transformationMatrix = new Matrix4x4();
                 transformationMatrix.SetTRS(transform.position, transform.rotation, transform.scale);
+                
                 Graphics.DrawMesh(renderer.mesh, transformationMatrix, renderer.material, 0);
             }
         }
