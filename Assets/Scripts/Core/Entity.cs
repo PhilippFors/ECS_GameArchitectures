@@ -16,8 +16,8 @@ namespace Core
 
         public virtual T GetComponent<T>() where T : EntityComponent
         {
-            // components.TryGetValue(typeof(T).Name, out var val);
-            return (T) components[typeof(T).Name];
+            components.TryGetValue(typeof(T).Name, out var val);
+            return (T) val;
         }
 
         public void AddComponent(EntityComponent component)

@@ -6,5 +6,8 @@ namespace Core.Components
     public class MoveComponent : EntityComponent
     {
         public float moveSpeed;
+        public float moveTime;
+        public float maxMoveTime = 1f;
+        public bool turnAround;
     }
 }

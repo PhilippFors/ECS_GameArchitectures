@@ -20,7 +20,8 @@ namespace Util
         {
             // Creating entities and entity configs is still possible in code, no editor needed technically
             var newEntity = coordinator.CreateEntity("");
-            coordinator.AddComponent<MoveComponent>(newEntity);
+            var moveComponent = coordinator.AddComponent<MoveComponent>(newEntity);
+            moveComponent.moveSpeed = 20;
             var transformComponent = coordinator.AddComponent<TransformComponent>(newEntity);
             transformComponent.scale = Vector3.one;
             var rendercomponent = coordinator.AddComponent<RenderComponent>(newEntity);

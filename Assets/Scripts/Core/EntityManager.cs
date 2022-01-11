@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Util;
 
 namespace Core
 {
@@ -43,23 +42,15 @@ namespace Core
         public EntityComponent AddComponent(Entity entity, EntityComponent component)
         {
             entity.AddComponent(component);
-
-            // i just want the type, not the namespaces :(
-            var componentType = component.GetType().ToString();
-            var split = componentType.Split('.');
-            var t = split[split.Length - 1];
-
-            var maskParse = (ComponentMask) Enum.Parse(typeof(ComponentMask), t);
-            componentMasks[entity] = componentMasks[entity] | maskParse;
+            
+            componentMasks[entity] = componentMasks[entity] | ParseMask(component.GetType());
             return component;
         }
 
         public void RemoveComponent<T>(Entity entity) where T : EntityComponent
         {
             entity.RemoveComponent<T>();
-            var componentType = typeof(T);
-            var maskParse = (ComponentMask) Enum.Parse(typeof(ComponentMask), componentType.ToString());
-            componentMasks[entity] = componentMasks[entity] & maskParse;
+            componentMasks[entity] = componentMasks[entity] & ParseMask(typeof(T));
         }
 
         public Entity CreateEntity(string type)
@@ -91,6 +82,9 @@ namespace Core
         public void CreateConfig(Entity entity, string configName)
         {
             var components = entity.GetComponents();
+            for (int i = 0; i < components.Count; i++) {
+                components[i] = ScriptableObject.Instantiate(components[i]);
+            }
             var config = ScriptableObject.CreateInstance(typeof(EntityConfig));
             var configInstance = (EntityConfig) ScriptableObject.Instantiate(config);
             configInstance.name = configName;
@@ -117,6 +111,15 @@ namespace Core
         {
             componentMasks.TryGetValue(entity, out var val);
             return val;
+        }
+
+        private ComponentMask ParseMask(Type type)
+        {
+            var componentType = type.ToString();
+            var split = componentType.Split('.');
+            var t = split[split.Length - 1];
+
+            return (ComponentMask) Enum.Parse(typeof(ComponentMask), t);
         }
     }
 }

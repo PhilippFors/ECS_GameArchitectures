@@ -15,15 +15,12 @@ namespace Core
             entityManager.Init();
             
             RegisterSystem<MoveSystem>();
-            // RegisterSystem<HelloWorldSystem>();
             RegisterSystem<RenderSystem>();
             
             var moveSystemMask = ComponentMask.MoveComponent | ComponentMask.TransformComponent;
-            var helloWorldSystemMask = ComponentMask.HelloWorldComponent;
             var renderSystemMask = ComponentMask.RenderComponent | ComponentMask.TransformComponent;
 
             SetComponentMask<MoveSystem>(moveSystemMask);
-            // SetComponentMask<HelloWorldSystem>(helloWorldSystemMask);
             SetComponentMask<RenderSystem>(renderSystemMask);
         }
 
