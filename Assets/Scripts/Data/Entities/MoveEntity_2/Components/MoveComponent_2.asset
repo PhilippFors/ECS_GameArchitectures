@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: MoveComponent_2
   m_EditorClassIdentifier: 
   componentID: 0
-  moveSpeed: 5
+  moveSpeed: 2
+  moveTime: 0
+  maxMoveTime: 1
+  turnAround: 0

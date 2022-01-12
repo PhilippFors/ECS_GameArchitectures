@@ -42,15 +42,16 @@ namespace Core
         public EntityComponent AddComponent(Entity entity, EntityComponent component)
         {
             entity.AddComponent(component);
-            
-            componentMasks[entity] = componentMasks[entity] | ParseMask(component.GetType());
+            var mask = ParseMask(component.GetType());
+            componentMasks[entity] = componentMasks[entity] | mask;
             return component;
         }
 
         public void RemoveComponent<T>(Entity entity) where T : EntityComponent
         {
             entity.RemoveComponent<T>();
-            componentMasks[entity] = componentMasks[entity] & ParseMask(typeof(T));
+            var mask = ParseMask(typeof(T));
+            componentMasks[entity] = componentMasks[entity] & mask;
         }
 
         public Entity CreateEntity(string type)

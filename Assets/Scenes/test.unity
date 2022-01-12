@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de25520dcf94c42bf6bc3e2c5058972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityCount: 100
+  entityCount: 920
 --- !u!114 &2019956336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityManager:
-    maxEntities: 2000
+    maxEntities: 2500
     entityCount: 0
     configs:
     - {fileID: 11400000, guid: f98e79fa3c919c142b4c78472f098337, type: 2}

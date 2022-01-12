@@ -5,48 +5,48 @@ namespace Core
 {
     public class SystemManager
     {
-        private Dictionary<string, ComponentSystem> systems;
-        private Dictionary<string, ComponentMask> masks;
+        private Dictionary<int, ComponentSystem> componentSystems;
+        private Dictionary<int, ComponentMask> componentMasks;
 
         public SystemManager()
         {
-            masks = new Dictionary<string, ComponentMask>();
-            systems = new Dictionary<string, ComponentSystem>();
+            componentMasks = new Dictionary<int, ComponentMask>();
+            componentSystems = new Dictionary<int, ComponentSystem>();
         }
 
         public T RegisterSystem<T>() where T : ComponentSystem, new()
         {
-            var hash = typeof(T).Name;
-            if (systems.ContainsKey(hash)) {
+            var hash = typeof(T).GetHashCode();
+            if (componentSystems.ContainsKey(hash)) {
                 Debug.LogError("System is already registered");
                 return null;
             }
 
             var sys = new T();
             sys.entities = new List<Entity>();
-            systems.Add(typeof(T).Name, sys);
+            componentSystems.Add(typeof(T).GetHashCode(), sys);
             sys.Initialize();
             return sys;
         }
 
         public void RemoveSystem<T>() where T : ComponentSystem
         {
-            var hash = typeof(T).Name;
-            if (systems.ContainsKey(hash)) {
+            var hash = typeof(T).GetHashCode();
+            if (componentSystems.ContainsKey(hash)) {
                 Debug.LogError("System is not registered");
                 return;
             }
 
-            systems.TryGetValue(hash, out var val);
-            systems.Remove(hash);
+            componentSystems.TryGetValue(hash, out var val);
+            componentSystems.Remove(hash);
         }
 
         public void UpdateEntity(Entity entity, ComponentMask entityMask)
         {
-            foreach (var pair in systems) {
+            foreach (var pair in componentSystems) {
                 var type = pair.Key;
                 var system = pair.Value;
-                masks.TryGetValue(type, out var systemMask);
+                componentMasks.TryGetValue(type, out var systemMask);
 
                 if ((entityMask & systemMask) == systemMask) {
                     if (!system.entities.Contains(entity)) {
@@ -62,7 +62,7 @@ namespace Core
 
         public void DestroyEntity(Entity entity)
         {
-            foreach (var pair in systems) {
+            foreach (var pair in componentSystems) {
                 var sys = pair.Value;
                 if (sys.entities.Contains(entity)) {
                     sys.entities.Remove(entity);
@@ -72,18 +72,19 @@ namespace Core
         
         public void SetComponentMask<T>(ComponentMask mask) where T : ComponentSystem
         {
-            var hash = typeof(T).Name;
-            masks.Add(hash, mask);
+            var hash = typeof(T).GetHashCode();
+            componentMasks.Add(hash, mask);
         }
 
         public void Update()
         {
-            if (systems.Count == 0) {
+            if (componentSystems.Count == 0) {
                 return;
             }
-            foreach (var pair in systems) {
+            
+            foreach (var pair in componentSystems) {
                 var sys = pair.Value;
-                sys.Update();
+                sys.Tick();
             }
         }
     }

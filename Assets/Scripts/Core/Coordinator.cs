@@ -24,6 +24,7 @@ namespace Core
             SetComponentMask<RenderSystem>(renderSystemMask);
         }
 
+        // main update loop
         private void Update()
         {
             systemManager.Update();

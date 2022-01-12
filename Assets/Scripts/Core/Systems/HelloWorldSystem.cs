@@ -5,11 +5,9 @@ namespace Core.Systems
 {
     public class HelloWorldSystem : ComponentSystem
     {
-        public override void Update()
+        public override void Update(Entity e)
         {
-            foreach (var e in entities) {
-                var c = e.GetComponent<HelloWorldComponent>();
-            }
+            // var c = e.GetComponent<HelloWorldComponent>();
         }
     }
 }
